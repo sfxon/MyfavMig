@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/master/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>General settings</title>
+        <title lang="de-DE">Allgemeine Einstellungen</title>
+        <input-field>
+            <name>myfavMigFrontendPass</name>
+            <placeholder>Frontend Password</placeholder>
+            <title>Frontend Password</title>
+            <title lang="de-DE">Frontend Passwort</title>
+        </input-field>
+    </card>
+</config>
