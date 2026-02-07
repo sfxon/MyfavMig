@@ -5,7 +5,7 @@
         <title>General settings</title>
         <title lang="de-DE">Allgemeine Einstellungen</title>
         <input-field>
-            <name>myfavMigFrontendPass</name>
+            <name>frontendPass</name>
             <placeholder>Frontend Password</placeholder>
             <title>Frontend Password</title>
             <title lang="de-DE">Frontend Passwort</title>
