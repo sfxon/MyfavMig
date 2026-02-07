@@ -9,8 +9,17 @@
 {% block base_main %}
     <div class="container-main">
         <div class="container">
+            {% if message|length > 0 %}
+                <div class="alert alert-success" role="alert" style="border: 1px solid #333; padding: 6px 12px; color: #FFF;">
+                    {% if message === 'myfavMigCreated' %}
+                        Das Helper Setup wurde angelegt.
+                    {% else %}
+                        Unbekannte Erfolgsmeldung
+                    {% endif %}
+                </div>
+            {% endif %}
             <h1>Migration Helper Setup</h1>
-            <button type="button" class="btn btn-secondary" id="myfav-mig-setup-add">Konfiguration hinzufügen</button>
+            <a href="{{ path('frontend.myfav.mig.setupNew', { p: auth }) }}"><button type="submit" class="btn btn-secondary" id="myfav-mig-setup-add">Konfiguration hinzufügen</button></a>
         </div>
     </div>
 {% endblock %}

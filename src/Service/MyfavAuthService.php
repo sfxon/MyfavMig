@@ -25,7 +25,7 @@ class MyfavAuthService
     /**
      * validateOrDie
      */
-    public function validateOrDie(Request $request): void
+    public function validateOrDie(Request $request): string
     {
         $config = $this->systemConfigService->get('MyfavMig.config.frontendPass');
 
@@ -38,5 +38,7 @@ class MyfavAuthService
         if($password !== $config) {
             die('Not authenticated');
         }
+
+        return $password;
     }
 }

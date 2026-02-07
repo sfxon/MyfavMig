@@ -1,0 +1,29 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_header %}
+{% endblock %}
+
+{% block base_navigation %}
+{% endblock %}
+
+{% block base_main %}
+    <div class="container-main">
+        <div class="container">
+            <h1>New Migration Setup Helper</h1>
+            <form action="{{ path('frontend.myfav.mig.setupCreate', { p: auth }) }}" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Name</label>
+                    <input type="text" name="name" class="form-control" autocomplete="false" />
+                </div>
+
+                <button type="submit" class="btn btn-secondary" id="myfav-mig-setup-create">Speichern</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block base_cookie_permission %}
+{% endblock %}
+
+{% block base_footer %}
+{% endblock %}

@@ -7,6 +7,8 @@
         <!-- Controller -->
         <service id="Myfav\Mig\Storefront\Controller\SetupController" public="true">
             <argument type="service" id="Myfav\Mig\Service\MyfavAuthService"/>
+            <argument type="service" id="Myfav\Mig\Service\MyfavMigService"/>
+            <argument type="service" id="Symfony\Component\Routing\RouterInterface" />
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
@@ -15,9 +17,18 @@
             </call>
         </service>
 
+        <!-- Entity -->
+        <service id="Myfav\Mig\Core\Content\MyfavMig\MyfavMigDefinition">
+            <tag name="shopware.entity.definition" entity="myfav_mig" />
+        </service>
+
         <!-- Service -->
         <service id="Myfav\Mig\Service\MyfavAuthService" public="true">
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+        </service>
+
+        <service id="Myfav\Mig\Service\MyfavMigService" public="true">
+            <argument id="myfav_mig.repository" type="service"/>
         </service>
     </services>
 </container>
