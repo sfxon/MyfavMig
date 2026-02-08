@@ -39,6 +39,7 @@ class SetupController extends StorefrontController
         $auth = $this->myfavAuthService->validateOrDie($request);
 
         $name = $request->request->get('name');
+        $controllerName = $request->request->get('controllerName');
         $pos = 0;
         $state = 0;
         $settings = [];
@@ -46,6 +47,7 @@ class SetupController extends StorefrontController
         $this->myfavMigService->create(
             $salesChannelContext->getContext(),
             $name,
+            $controllerName,
             $pos,
             $state,
             $settings

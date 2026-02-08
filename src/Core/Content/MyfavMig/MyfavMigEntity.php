@@ -10,6 +10,7 @@ class MyfavMigEntity extends Entity
     use EntityIdTrait;
 
     protected ?string $name;
+    protected ?string $controllerName;
     protected int $pos;
     protected int $state;
     protected $settings;
@@ -23,6 +24,17 @@ class MyfavMigEntity extends Entity
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    // $controllerName
+    public function getControllerName(): ?string
+    {
+        return $this->controllerName;
+    }
+
+    public function setControllerName(?string $controllerName): void
+    {
+        $this->controllerName = $controllerName;
     }
 
     // pos

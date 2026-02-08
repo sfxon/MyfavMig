@@ -20,6 +20,7 @@ class MyfavMigService
     public function create(
         Context $context,
         string $name,
+        string $controllerName,
         int $pos,
         int $state,
         array $settings): string
@@ -29,6 +30,7 @@ class MyfavMigService
         $this->myfavMigRepository->create([[
             'id' => $id,
             'name' => $name,
+            'controllerName' => $controllerName,
             'pos' => $pos,
             'state' => $state,
             'settings' => $settings

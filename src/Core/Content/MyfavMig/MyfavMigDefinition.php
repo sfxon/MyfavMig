@@ -56,6 +56,7 @@ class MyfavMigDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey(), new ApiAware()),
             (new StringField('name', 'name'))->addFlags(new Required()),
+            (new StringField('controller_name', 'controllerName'))->addFlags(new Required()),
             (new IntField('pos', 'pos')),
             (new IntField('state', 'state')),
             (new JsonField('settings', 'settings')),

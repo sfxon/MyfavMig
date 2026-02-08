@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block base_main %}
-    <div class="container-main">
+    <div class="container-main" myfav-mig-worker="myfav-mig-worker">
         <div class="container">
             {% if message|length > 0 %}
                 <div class="alert alert-success" role="alert" style="border: 1px solid #333; padding: 6px 12px; color: #FFF;">
@@ -23,15 +23,20 @@
             <h1>Migration Helper - Worker</h1>
             <div class="myfav-mig">
                 <div class="myfav-mig mb-3 mt-3" style="font-size: 1rem;">
-                    Name: {{ myfavMig.name }}<br />
                     ID: {{ myfavMig.id }}<br />
+                    Name: {{ myfavMig.name }}<br />
+                    Controller-Name: {{ myfavMig.controllerName }}<br />
                     Pos.: <span id="myfav-mig-worker-pos">{{ myfavMig.pos}}</span><br />
                     State: <span id="myfav-mig-worker-state">{{ myfavMig.state}}</span><br /><br />
-                    <a href="#"><button type="submit" class="btn btn-primary" id="myfav-mig-worker-start">Verarbeitung starten/fortsetzen</button></a>
+                    <div class="mb-3">
+                        <label class="form-label" for="myfav-mig-worker-selected-entries">Einträge die verarbeitet werden sollen:</label>
+                        <input type="text" name="name" class="form-control" id="myfav-mig-worker-selected-entries" />
+                        <small>Über diesen Parameter können bestimmte Werte eingegeben werden, um die Verarbeitung einzuschränken. Das kann je Typ variieren. Bspw. können das Artikel-Nummern sein.</small>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="myfav-mig-worker-start">Verarbeitung starten/fortsetzen</button>
                 </div>
                 <hr />
-                Log:<br />
-                <br />
+                <div>Log:</div>
                 <div id="myfav-mig-worker-log"></div>
             </div>
         </div>

@@ -18,6 +18,7 @@ class Migration1770477154MyfavMig extends MigrationStep
             'CREATE TABLE IF NOT EXISTS `myfav_mig` (
                 `id` BINARY(16) NOT NULL,
                 `name` VARCHAR(256) DEFAULT \'New\',
+                `controller_name` VARCHAR(256) DEFAULT NULL,
                 `pos` INT(11) DEFAULT 0,
                 `state` INT(11) DEFAULT 0,
                 `settings` JSON DEFAULT NULL,
