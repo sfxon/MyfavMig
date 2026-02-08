@@ -20,6 +20,11 @@
             {% endif %}
             <h1>Migration Helper Setup</h1>
             <a href="{{ path('frontend.myfav.mig.setupNew', { p: auth }) }}"><button type="submit" class="btn btn-secondary" id="myfav-mig-setup-add">Konfiguration hinzufügen</button></a>
+            <div class="myfav-migs">
+                {% for mig in myfavMigs %}
+                    <div class="myfav-mig mb-3 mt-3" style="font-size: 1rem;"><a href="#">{{ mig.name }} ({{ mig.pos}}) - ({{ mig.state}})</a></div>
+                {% endfor %}
+            </div>
         </div>
     </div>
 {% endblock %}

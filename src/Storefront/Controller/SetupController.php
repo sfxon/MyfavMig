@@ -57,19 +57,21 @@ class SetupController extends StorefrontController
     }
 
     #[Route(path: '/myfav/mig/setupList', name: 'frontend.myfav.mig.setupList', methods: ['GET'])]
-    public function setupList(Request $request, SalesChannelContext $context): Response
+    public function setupList(Request $request, SalesChannelContext $salesChannelContext): Response
     {
         $auth = $this->myfavAuthService->validateOrDie($request);
         $message = $request->get('message');
+        $myfavMigs = $this->myfavMigService->fetchAll($salesChannelContext->getContext());
 
         return $this->renderStorefront('@MyfavMig/storefront/page/myfav-mig-setup/index.html.twig', [
             'auth' => $auth,
-            'message' => $message
+            'message' => $message,
+            'myfavMigs' => $myfavMigs
         ]);
     }
 
     #[Route(path: 'myfav/mig/setupNew', name: 'frontend.myfav.mig.setupNew', methods: ['GET'])]
-    public function setupNew(Request $request, SalesChannelContext $context): Response
+    public function setupNew(Request $request, SalesChannelContext $salesChannelContext): Response
     {
         $auth = $this->myfavAuthService->validateOrDie($request);
 

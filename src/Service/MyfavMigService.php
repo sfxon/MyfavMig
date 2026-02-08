@@ -4,6 +4,7 @@ namespace Myfav\Mig\Service;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Shopware\Core\Framework\Uuid\Uuid;
 
 class MyfavMigService
@@ -34,5 +35,9 @@ class MyfavMigService
         ]], $context);
 
         return $id;
+    }
+
+    public function fetchAll(Context $context) {
+        return $this->myfavMigRepository->search(new Criteria(), $context);
     }
 }
