@@ -34,6 +34,11 @@
             <tag name="shopware.entity.definition" entity="myfav_mig" />
         </service>
 
+        <!-- Processor -->
+        <service id="Myfav\Mig\Processor\ProductProcessorOne" public="true">
+            <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+        </service>
+
         <!-- Service -->
         <service id="Myfav\Mig\Service\MyfavAuthService" public="true">
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>

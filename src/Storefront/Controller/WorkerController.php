@@ -6,6 +6,7 @@ use Myfav\Mig\Service\MyfavAuthService;
 use Myfav\Mig\Service\MyfavMigService;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,5 +41,28 @@ class WorkerController extends StorefrontController
             'message' => $message,
             'myfavMig' => $myfavMig
         ]);
+    }
+
+    #[Route(path: 'myfav/mig/work', name: 'frontend.myfav.mig.work', methods: ['GET'])]
+    public function work(Request $request, SalesChannelContext $salesChannelContext): Response
+    {
+        $auth = $this->myfavAuthService->validateOrDie($request);
+        $serviceId = $request->get('controllerName');
+
+        // Load worker data.
+        $myfavMig = $this->myfavMigService->loadById($salesChannelContext->getContext(), $request->get('myfavMigId'));
+
+        if(null === $myfavMig) {
+            die('No worker with given id found');
+        }
+
+        if (!$this->container->has($myfavMig->getControllerName())) {
+           die('Service with name ' . $myfavMig->getControllerName() . ' not found');
+        }
+
+        $service = $this->container->get($myfavMig->getControllerName());
+        $service->process($request, $myfavMig);
+
+        return new JsonResponse(['test' => 'test']);
     }
 }

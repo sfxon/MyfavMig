@@ -8,6 +8,9 @@
 
 {% block base_main %}
     <div class="container-main" myfav-mig-worker="myfav-mig-worker">
+        <input type="hidden" id="myfav-mig-work-url" value="{{ url('frontend.myfav.mig.work') }}" />
+        <input type="hidden" id="myfav-mig-worker-auth" value="{{ auth }}" />
+        <input type="hidden" id="myfav-mig-worker-myfav-mig-id" value="{{ myfavMig.id }}" />
         <div class="container">
             {% if message|length > 0 %}
                 <div class="alert alert-success" role="alert" style="border: 1px solid #333; padding: 6px 12px; color: #FFF;">
