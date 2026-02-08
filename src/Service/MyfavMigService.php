@@ -37,7 +37,13 @@ class MyfavMigService
         return $id;
     }
 
-    public function fetchAll(Context $context) {
+    public function fetchAll(Context $context): mixed
+    {
         return $this->myfavMigRepository->search(new Criteria(), $context);
+    }
+
+    public function loadById(Context $context, string $myfavMigId): mixed
+    {
+        return $this->myfavMigRepository->search(new Criteria([$myfavMigId]), $context)->first();
     }
 }

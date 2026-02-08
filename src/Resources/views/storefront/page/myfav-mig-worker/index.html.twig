@@ -11,19 +11,28 @@
         <div class="container">
             {% if message|length > 0 %}
                 <div class="alert alert-success" role="alert" style="border: 1px solid #333; padding: 6px 12px; color: #FFF;">
+                    {#
                     {% if message === 'myfavMigCreated' %}
                         Das Helper Setup wurde angelegt.
                     {% else %}
                         Unbekannte Erfolgsmeldung
                     {% endif %}
+                    #}
                 </div>
             {% endif %}
-            <h1>Migration Helper Setup</h1>
-            <a href="{{ path('frontend.myfav.mig.setupNew', { p: auth }) }}"><button type="submit" class="btn btn-secondary" id="myfav-mig-setup-add">Konfiguration hinzufügen</button></a>
-            <div class="myfav-migs">
-                {% for mig in myfavMigs %}
-                    <div class="myfav-mig mb-3 mt-3" style="font-size: 1rem;"><a href="{{ path('frontend.myfav.mig.worker', { p: auth, myfavMigId: mig.id }) }}">{{ mig.name }} ({{ mig.pos}}) - ({{ mig.state}})</a></div>
-                {% endfor %}
+            <h1>Migration Helper - Worker</h1>
+            <div class="myfav-mig">
+                <div class="myfav-mig mb-3 mt-3" style="font-size: 1rem;">
+                    Name: {{ myfavMig.name }}<br />
+                    ID: {{ myfavMig.id }}<br />
+                    Pos.: <span id="myfav-mig-worker-pos">{{ myfavMig.pos}}</span><br />
+                    State: <span id="myfav-mig-worker-state">{{ myfavMig.state}}</span><br /><br />
+                    <a href="#"><button type="submit" class="btn btn-primary" id="myfav-mig-worker-start">Verarbeitung starten/fortsetzen</button></a>
+                </div>
+                <hr />
+                Log:<br />
+                <br />
+                <div id="myfav-mig-worker-log"></div>
             </div>
         </div>
     </div>
