@@ -3,6 +3,7 @@
 namespace Myfav\Mig\Processor;
 
 use Myfav\Mig\Core\Content\MyfavMig\MyfavMigEntity;
+use Myfav\Mig\Service\ApiService;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\RouterInterface;
 class ProductProcessorOne
 {
     public function __construct(
+        private readonly ApiService $apiService,
         private readonly SystemConfigService $systemConfigService,
     ) {
     }
@@ -28,8 +30,9 @@ class ProductProcessorOne
      */
     public function process(Request $request, MyfavMigEntity $myfavMig): string
     {
-        $config = $this->systemConfigService->get('MyfavMig.config.frontendPass');
+        $path = '/api/articles';
+        $response = $this->apiService->fetchData($path, $request);
 
-        return 'test';
+        return $response;
     }
 }

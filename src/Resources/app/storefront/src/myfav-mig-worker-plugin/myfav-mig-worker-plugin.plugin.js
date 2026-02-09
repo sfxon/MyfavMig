@@ -32,7 +32,7 @@ export default class  MyfavMigPlugin extends PluginBaseClass {
         this.myfavMigWorkerStartBtn.classList.remove('btn-primary');
     }
 
-    nextRequest() {
+    async nextRequest() {
         let params = new URLSearchParams({
             p: this.auth,
             myfavMigId: this.myfavMigId,
@@ -40,8 +40,22 @@ export default class  MyfavMigPlugin extends PluginBaseClass {
             ts: Date.now(),
             rnd: Math.random().toString(36).slice(2)
         }).toString();
-        let url = this.workUrl + '?' + params;
 
-        console.log(url);
+        let url = this.workUrl + '?' + params;
+        document.getElementById('myfav-mig-worker-last-called-url').textContent = url;
+        let result = await this.fetchData(url);
+
+        console.log('Resut: ', result);
+    }
+
+    async fetchData(url) {
+        const response = await fetch(url); // fetch starten
+
+        if (!response.ok) {
+            throw new Error('Fehler beim Aufruf des Workers: ' + response.status);
+        }
+
+        const data = await response.json(); // JSON parsen
+        return data; // Wert direkt zurückgeben
     }
 }

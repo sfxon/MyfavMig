@@ -36,10 +36,15 @@
 
         <!-- Processor -->
         <service id="Myfav\Mig\Processor\ProductProcessorOne" public="true">
+            <argument id="Myfav\Mig\Service\ApiService" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>
 
         <!-- Service -->
+        <service id="Myfav\Mig\Service\ApiService" public="true">
+            <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+        </service>
+
         <service id="Myfav\Mig\Service\MyfavAuthService" public="true">
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>

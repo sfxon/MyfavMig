@@ -10,5 +10,26 @@
             <title>Frontend Password</title>
             <title lang="de-DE">Frontend Passwort</title>
         </input-field>
+
+        <input-field>
+            <name>srcShopApiUrl</name>
+            <placeholder>Quell-Shop API URL</placeholder>
+            <title>Source-Shop API URL</title>
+            <title lang="de-DE">Quell-Shop API URL</title>
+        </input-field>
+
+        <input-field>
+            <name>srcShopApiUsername</name>
+            <placeholder>Quell-Shop API Benutzername</placeholder>
+            <title>Source-Shop API Username</title>
+            <title lang="de-DE">Quell-Shop API Benutzername</title>
+        </input-field>
+
+        <input-field>
+            <name>srcShopApiKey</name>
+            <placeholder>Quell-Shop API Schlüssel</placeholder>
+            <title>Source-Shop API Key</title>
+            <title lang="de-DE">Quell-Shop API Schlüssel</title>
+        </input-field>
     </card>
 </config>
