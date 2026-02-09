@@ -37,6 +37,8 @@
         <!-- Processor -->
         <service id="Myfav\Mig\Processor\ProductProcessorOne" public="true">
             <argument id="Myfav\Mig\Service\ApiService" type="service"/>
+            <argument id="Myfav\Mig\Service\ManufacturerService" type="service"/>
+            <argument id="Myfav\Mig\Service\ProductService" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>
 
@@ -45,8 +47,16 @@
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>
 
+        <service id="Myfav\Mig\Service\ManufacturerService" public="true">
+            <argument id="product_manufacturer.repository" type="service"/>
+        </service>
+
         <service id="Myfav\Mig\Service\MyfavAuthService" public="true">
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+        </service>
+
+        <service id="Myfav\Mig\Service\ProductService" public="true">
+            <argument id="product.repository" type="service"/>
         </service>
 
         <service id="Myfav\Mig\Service\MyfavMigService" public="true">

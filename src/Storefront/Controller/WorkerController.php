@@ -61,7 +61,7 @@ class WorkerController extends StorefrontController
         }
 
         $service = $this->container->get($myfavMig->getControllerName());
-        $result = $service->process($request, $myfavMig);
+        $result = $service->process($salesChannelContext->getContext(), $request, $myfavMig);
 
         return new JsonResponse($result);
     }

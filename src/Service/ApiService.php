@@ -25,10 +25,10 @@ class ApiService
     /**
      * fetchData
      */
-    public function fetchData(string $path, Request $request): string
+    public function fetchData(string $path, string $query): string
     {
         $config = $this->systemConfigService->get('MyfavMig.config');
-        $endpointUrl = $this->buildUrl($config, $path, $request);
+        $endpointUrl = $this->buildUrl($config, $path, $query);
 
         // cURL initialisieren
         $ch = curl_init($endpointUrl);
@@ -52,9 +52,8 @@ class ApiService
         return $response;
     }
 
-    private function buildUrl($config, $path, $request) {
-        $selectedEntries = $request->get('selectedEntries');
-        return $config['srcShopApiUrl'] . $path . '?filter[0][property]=mainDetail.number&filter[0][value]=' . urlencode($selectedEntries);
+    private function buildUrl($config, $path, $query) {
+        return $config['srcShopApiUrl'] . $path . $query;
     }
 
     private function buildUserPwd($config) {
