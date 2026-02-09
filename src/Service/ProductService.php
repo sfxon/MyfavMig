@@ -18,7 +18,15 @@ class ProductService
     public function loadByProductNumber(Context $context, string $productNumber): mixed
     {
         $criteria = new Criteria();
+        $criteria->addAssociation('properties');
         $criteria->addFilter(new EqualsFilter('productNumber', $productNumber));
+        return $this->productRepository->search($criteria, $context)->first();
+    }
+
+    public function loadByProductId(Context $context, string $productId): mixed
+    {
+        $criteria = new Criteria([$productId]);
+        $criteria->addAssociation('properties');
         return $this->productRepository->search($criteria, $context)->first();
     }
 

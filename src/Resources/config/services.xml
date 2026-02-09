@@ -39,6 +39,7 @@
             <argument id="Myfav\Mig\Service\ApiService" type="service"/>
             <argument id="Myfav\Mig\Service\ManufacturerService" type="service"/>
             <argument id="Myfav\Mig\Service\ProductService" type="service"/>
+            <argument id="Myfav\Mig\Service\PropertyService" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
         </service>
 
@@ -57,6 +58,12 @@
 
         <service id="Myfav\Mig\Service\ProductService" public="true">
             <argument id="product.repository" type="service"/>
+        </service>
+
+        <service id="Myfav\Mig\Service\PropertyService" public="true">
+            <argument id="product.repository" type="service"/>
+            <argument id="property_group.repository" type="service"/>
+            <argument id="property_group_option.repository" type="service"/>
         </service>
 
         <service id="Myfav\Mig\Service\MyfavMigService" public="true">
