@@ -85,6 +85,11 @@ class ProductProcessorOne
         // Custom-Fields
         $customFields['ps_number_of_disks'] = strval($data['mainDetail']['attribute']['attr2']); // Anzahl Disks
 
+        // Stati
+        $active = $data['active'];
+        $isCloseout = $data['lastStock'];
+        $minPurchase = $data['mainDetail']['minPurchase'];
+
         // Properties laden.
         // Lade zuerst die Option Groups, damit wir an die Namen der Optionen kommen.
         $optionGroupResponse = $this->apiService->fetchData('/api/propertyGroups', '');
@@ -111,7 +116,7 @@ class ProductProcessorOne
 
         // Get categories.
         $categoryMappingData = new CategoryMappingData();
-        $mapppedCategoryData = [];
+        $mappedCategoryData = [];
 
         foreach($data['categories'] as $oldCategory) {
             $query = '/' . urlencode(strval($oldCategory['id'])); // Single manufacturer details can be retrieved via the manufacturer ID: http://my-shop-url/api/manufacturers/id
@@ -132,7 +137,10 @@ class ProductProcessorOne
             $data['name'],
             $data['descriptionLong'],
             $manufacturerId,
-            $customFields
+            $customFields,
+            $active,
+            $isCloseout,
+            $minPurchase
         );
 
         $this->updateProductProperties($context, $product->getId(), $saveProperties);
@@ -148,7 +156,10 @@ class ProductProcessorOne
         string $productName,
         string $productDescription,
         string $manufacturerId,
-        array $customFields)
+        array $customFields,
+        bool $active,
+        bool $isCloseout,
+        int $minPurchase)
     {
         $data = [
             'id' => $productId,
@@ -156,6 +167,9 @@ class ProductProcessorOne
             'manufacturerId' => $manufacturerId,
             'customFields' => $customFields,
             'description' => $productDescription,
+            'active' => $active,
+            'isCloseout' => $isCloseout,
+            'minPurchase' => $minPurchase
         ];
 
         $this->productService->updateProduct($context, $data);
