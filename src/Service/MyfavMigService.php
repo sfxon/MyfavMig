@@ -48,4 +48,8 @@ class MyfavMigService
     {
         return $this->myfavMigRepository->search(new Criteria([$myfavMigId]), $context)->first();
     }
+
+    public function update($context, $data) {
+        $this->myfavMigRepository->update([ $data ], $context);
+    }
 }

@@ -65,4 +65,27 @@ class WorkerController extends StorefrontController
 
         return new JsonResponse($result);
     }
+
+    #[Route(path: 'myfav/mig/workGetNextEntryToProcess', name: 'frontend.myfav.mig.workGetNextEntryToProcess', methods: ['GET'])]
+    public function workGetNextEntryToProcess(Request $request, SalesChannelContext $salesChannelContext): Response
+    {
+        $auth = $this->myfavAuthService->validateOrDie($request);
+        $serviceId = $request->get('controllerName');
+
+        // Load worker data.
+        $myfavMig = $this->myfavMigService->loadById($salesChannelContext->getContext(), $request->get('myfavMigId'));
+
+        if(null === $myfavMig) {
+            die('No worker with given id found');
+        }
+
+        if (!$this->container->has($myfavMig->getControllerName())) {
+           die('Service with name ' . $myfavMig->getControllerName() . ' not found');
+        }
+
+        $service = $this->container->get($myfavMig->getControllerName());
+        $result = $service->nextEntry($salesChannelContext->getContext(), $request, $myfavMig);
+
+        return new JsonResponse($result);
+    }
 }

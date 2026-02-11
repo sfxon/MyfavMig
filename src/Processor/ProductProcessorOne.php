@@ -7,20 +7,12 @@ use Myfav\Mig\Data\CategoryMappingData;
 use Myfav\Mig\Service\ApiService;
 use Myfav\Mig\Service\CategoryService;
 use Myfav\Mig\Service\ManufacturerService;
+use Myfav\Mig\Service\MyfavMigService;
 use Myfav\Mig\Service\ProductService;
 use Myfav\Mig\Service\PropertyService;
 use Shopware\Core\Framework\Context;
-use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Shopware\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Shopware\Core\Framework\Uuid\Uuid;
-use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Core\System\SystemConfig\SystemConfigService;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\RouterInterface;
 
 class ProductProcessorOne
 {
@@ -28,6 +20,7 @@ class ProductProcessorOne
         private readonly ApiService $apiService,
         private readonly CategoryService $categoryService,
         private readonly ManufacturerService $manufacturerService,
+        private readonly MyfavMigService $myfavMigService,
         private readonly ProductService $productService,
         private readonly PropertyService $propertyService,
         private readonly SystemConfigService $systemConfigService,
@@ -35,11 +28,19 @@ class ProductProcessorOne
     }
 
     /**
-     * validateOrDie
+     * process
      */
-    public function process(Context $context, Request $request, MyfavMigEntity $myfavMig): string
+    public function process(Context $context, Request $request, MyfavMigEntity $myfavMig): array
     {
         $selectedEntries = $request->get('selectedEntries');
+
+        // Get local product.
+        $product = $this->productService->loadByProductNumber($context, strval($selectedEntries));
+
+        if(null === $product) {
+            die('Unknown product with product number ' . $data['mainDetailId']);
+        }
+
         // This is a product search, but not what we want to do right now, when we want to get a specific entry.
         // $query = '?filter[0][property]=mainDetail.number&filter[0][value]=' . urlencode($selectedEntries);
         $query = $selectedEntries . '?useNumberAsId=true';
@@ -48,18 +49,19 @@ class ProductProcessorOne
         $data = json_decode($response, true);
 
         if(!isset($data['data']) || !is_array($data['data'])) {
-            echo 'illegal result:';
-            dd($data);
+            // Artikel lokal deaktivieren.
+            $updateData = [
+                'id' => $product->getId(),
+                'active' => false
+            ];
+
+            return [
+                'status' => 'Product not found.',
+                'detailMessage' => 'Product with product number ' . $product->getProductNumber() . ' not found on remote server.'
+            ];
         }
 
         $data = $data['data'];
-
-        // Get local product.
-        $product = $this->productService->loadByProductNumber($context, strval($data['mainDetail']['number']));
-
-        if(null === $product) {
-            die('Unknown product with product number ' . $data['mainDetailId']);
-        }
 
         // Get manufacturer data.
         $query = '/' . urlencode(strval($data['supplierId'])); // Single manufacturer details can be retrieved via the manufacturer ID: http://my-shop-url/api/manufacturers/id
@@ -108,7 +110,6 @@ class ProductProcessorOne
                             'groupName' => $option['name'],
                             'valueName' => $optionValueName
                         ];
-                        //echo $option['name'] . ': ' . $optionValueName . '<br />';
                     }
                 }
             }
@@ -127,7 +128,16 @@ class ProductProcessorOne
             // If a category is unknown, the system should report an error and stop. Then the operator (you) has to add the entry to the mapping class by hand.
             // After that, processing can be continued. That way, also the sales channel and the correct new categories are assigned, without having to build complex logic or saving technology.
             // At this stage, a tool like this is only to be run at the beginning of a project, and after that it gets obsolete. So that's why I keep things simple here.
-            $mappedCategoryData[] = $categoryMappingData->getEntryByOldCategoryId(strval($category['data']['id']));
+            $mappingData = $categoryMappingData->getEntryByOldCategoryId(strval($category['data']['id']));
+
+            if($mappingData === null) {
+                return [
+                    'status' => 'category mapping not found',
+                    'oldCategoryData' => $oldCategory
+                ];
+            }
+            
+            $mappedCategoryData[] = $mappingData;
         }
 
         // Write data.
@@ -147,7 +157,36 @@ class ProductProcessorOne
         $this->updateProductCategories($context, $product->getId(), $mappedCategoryData);
         $this->updateProductSalesChannels($context, $product->getId(), $mappedCategoryData);
 
-        return $response;
+        return [
+            'status' => 'success'
+        ];
+    }
+
+    /**
+     * nextEntry
+     */
+    public function nextEntry(Context $context, Request $request, MyfavMigEntity $myfavMig): array
+    {
+        $pos = intval($request->get('pos'));
+        $this->myfavMigService->update($context, [ 'id' => $myfavMig->getId(), 'pos' => $pos ]);
+
+        $pos = $myfavMig->getPos();
+        $product = $this->productService->getNextProduct($context, $pos);
+        $retval = [];
+
+        if(null === $product) {
+            $retval = [
+                'status' => 'end',
+                'productNumber' => ''
+            ];
+        } else {
+            $retval = [
+                'status' => 'success',
+                'productNumber' => $product->getProductNumber()
+            ];
+        }
+
+        return $retval;
     }
 
     private function updateProduct(

@@ -39,6 +39,7 @@
             <argument id="Myfav\Mig\Service\ApiService" type="service"/>
             <argument id="Myfav\Mig\Service\CategoryService" type="service"/>
             <argument id="Myfav\Mig\Service\ManufacturerService" type="service"/>
+            <argument id="Myfav\Mig\Service\MyfavMigService" type="service"/>
             <argument id="Myfav\Mig\Service\ProductService" type="service"/>
             <argument id="Myfav\Mig\Service\PropertyService" type="service"/>
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
