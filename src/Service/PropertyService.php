@@ -17,7 +17,7 @@ class PropertyService
     ) {
     }
 
-    public function upsertPropertyToProduct(Context $context, string $productId, string $propertyGroupName, string $propertyOptionName, $existingProperties): mixed
+    public function upsertPropertyToProduct(Context $context, string $productId, string $propertyGroupName, string $propertyOptionName, $existingProperties)
     {
         $propertyGroupId = $this->upsertPropertyGroup($context, $propertyGroupName);
         $propertyOptionId = $this->upsertPropertyGroupOption($context, $propertyGroupId, $propertyOptionName);

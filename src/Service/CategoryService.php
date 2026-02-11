@@ -17,6 +17,8 @@ class CategoryService
 
     public function getNewCategoriesIdArray(Context $context, array $oldCategories)
     {
-        dd($oldCategories);
+        foreach($oldCategories as $oldCategory) {
+            dd($oldCategory);
+        }
     }
 }

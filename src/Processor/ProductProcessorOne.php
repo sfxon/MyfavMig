@@ -3,6 +3,7 @@
 namespace Myfav\Mig\Processor;
 
 use Myfav\Mig\Core\Content\MyfavMig\MyfavMigEntity;
+use Myfav\Mig\Data\CategoryMappingData;
 use Myfav\Mig\Service\ApiService;
 use Myfav\Mig\Service\CategoryService;
 use Myfav\Mig\Service\ManufacturerService;
@@ -109,11 +110,23 @@ class ProductProcessorOne
         }
 
         // Get categories.
-        $categories = $this->categoryService->getNewCategoriesIdArray($context, $data['categories']);
-        dd($categories);
+        $categoryMappingData = new CategoryMappingData();
+        $mapppedCategoryData = [];
 
-        // Schreibe Artikel-Daten.
-        $this->updateArticle(
+        foreach($data['categories'] as $oldCategory) {
+            $query = '/' . urlencode(strval($oldCategory['id'])); // Single manufacturer details can be retrieved via the manufacturer ID: http://my-shop-url/api/manufacturers/id
+            $category = $this->apiService->fetchData('/api/categories', $query);
+            $category = json_decode($category, true);
+
+            // This works with a mapping. For now, the data is hard coded in a helper class Data\CategoryMappingData.
+            // If a category is unknown, the system should report an error and stop. Then the operator (you) has to add the entry to the mapping class by hand.
+            // After that, processing can be continued. That way, also the sales channel and the correct new categories are assigned, without having to build complex logic or saving technology.
+            // At this stage, a tool like this is only to be run at the beginning of a project, and after that it gets obsolete. So that's why I keep things simple here.
+            $mappedCategoryData[] = $categoryMappingData->getEntryByOldCategoryId(strval($category['data']['id']));
+        }
+
+        // Write data.
+        $this->updateProduct(
             $context,
             $product->getId(),
             $data['name'],
@@ -123,11 +136,13 @@ class ProductProcessorOne
         );
 
         $this->updateProductProperties($context, $product->getId(), $saveProperties);
+        $this->updateProductCategories($context, $product->getId(), $mappedCategoryData);
+        $this->updateProductSalesChannels($context, $product->getId(), $mappedCategoryData);
 
         return $response;
     }
 
-    private function updateArticle(
+    private function updateProduct(
         Context $context,
         string $productId,
         string $productName,
@@ -146,6 +161,30 @@ class ProductProcessorOne
         $this->productService->updateProduct($context, $data);
     }
 
+    private function updateProductCategories($context, $productId, $mappedCategoryData)
+    {
+        // This will only add up new data. If you wanted to remove old assigned categories, you'd have to delete them first.
+        // Read this for details about the topic: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/replacing-associated-data.html
+        $categoryIds = [];
+        $alreadyAssignedCategories = [];
+
+        foreach($mappedCategoryData as $cat) {
+            if(!isset($alreadyAssignedCategories[$cat['newId']])) {
+                $categoryIds[] = [
+                    'id' => $cat['newId']
+                ];
+                $alreadyAssignedCategories[$cat['newId']] = $cat['newId'];
+            }
+        }
+
+        $data = [
+            'id' => $productId,
+            'categories' => $categoryIds
+        ];
+
+        $this->productService->updateProduct($context, $data);
+    }
+
     private function updateProductProperties($context, $productId, $saveProperties)
     {
         foreach($saveProperties as $prop) {
@@ -153,5 +192,30 @@ class ProductProcessorOne
             $existingProperties = $product->getProperties();
             $this->propertyService->upsertPropertyToProduct($context, $productId, $prop['groupName'], $prop['valueName'], $existingProperties);
         }
+    }
+
+    private function updateProductSalesChannels($context, $productId, $mappedCategoryData)
+    {
+        // This will only add up new data. If you wanted to remove old assigned categories, you'd have to delete them first.
+        // Read this for details about the topic: https://developer.shopware.com/docs/guides/plugins/plugins/framework/data-handling/replacing-associated-data.html
+        $salesChannelIds = [];
+        $alreadyAssignedSalesChannels = [];
+
+        foreach($mappedCategoryData as $cat) {
+            if(!isset($alreadyAssignedSalesChannels[$cat['salesChannelId']])) {
+                $salesChannelIds[] = [
+                    'id' => $cat['salesChannelId']
+                ];
+
+                $alreadyAssignedSalesChannels[$cat['salesChannelId']] = $cat['salesChannelId'];
+            }
+        }
+
+        $data = [
+            'id' => $productId,
+            'salesChannels' => $salesChannelIds
+        ];
+
+        $this->productService->updateProduct($context, $data);
     }
 }
