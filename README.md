@@ -2,6 +2,14 @@
 
 Migration Helper for Shopware 6
 
+## Storefront Route
+
+```
+your-domain.com/myfav/mig/worker?p=your-password
+
+/myfav/mig/worker
+```
+
 
 ## Concept
 
@@ -10,7 +18,7 @@ Migration Helper for Shopware 6
 
 ## Configuration
 
-* The plugin has a configuration. You need to provide a password, to be able to run the frontend commands. If you leave the field blank, the frontend workers will not be available. Configure it under ```Shopware Admin > Extensions > Plugins```.
+* The plugin has a configuration. You need to provide a password, to be able to run the frontend commands. If you leave the field blank, the frontend workers will not be available. Configure it directly in the plugin configuration in the shopware admin.
 
 ## Example Processor
 

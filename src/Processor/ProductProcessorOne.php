@@ -4,6 +4,7 @@ namespace Myfav\Mig\Processor;
 
 use Myfav\Mig\Core\Content\MyfavMig\MyfavMigEntity;
 use Myfav\Mig\Service\ApiService;
+use Myfav\Mig\Service\CategoryService;
 use Myfav\Mig\Service\ManufacturerService;
 use Myfav\Mig\Service\ProductService;
 use Myfav\Mig\Service\PropertyService;
@@ -24,6 +25,7 @@ class ProductProcessorOne
 {
     public function __construct(
         private readonly ApiService $apiService,
+        private readonly CategoryService $categoryService,
         private readonly ManufacturerService $manufacturerService,
         private readonly ProductService $productService,
         private readonly PropertyService $propertyService,
@@ -61,6 +63,7 @@ class ProductProcessorOne
         // Get manufacturer data.
         $query = '/' . urlencode(strval($data['supplierId'])); // Single manufacturer details can be retrieved via the manufacturer ID: http://my-shop-url/api/manufacturers/id
         $supplier = $this->apiService->fetchData('/api/manufacturers', $query);
+
         $supplier = json_decode($supplier, true);
         $supplierName = $supplier['data']['name'];
 
@@ -104,6 +107,10 @@ class ProductProcessorOne
                 }
             }
         }
+
+        // Get categories.
+        $categories = $this->categoryService->getNewCategoriesIdArray($context, $data['categories']);
+        dd($categories);
 
         // Schreibe Artikel-Daten.
         $this->updateArticle(
