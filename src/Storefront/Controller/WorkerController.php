@@ -7,6 +7,7 @@ use Myfav\Mig\Service\MyfavMigService;
 use Shopware\Core\System\SalesChannel\SalesChannelContext;
 use Shopware\Storefront\Controller\StorefrontController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -41,6 +42,29 @@ class WorkerController extends StorefrontController
             'message' => $message,
             'myfavMig' => $myfavMig
         ]);
+    }
+
+    #[Route(path: 'myfav/mig/workerReset', name: 'frontend.myfav.mig.workerReset', methods: ['GET'])]
+    public function workerReset(Request $request, SalesChannelContext $salesChannelContext): RedirectResponse
+    {
+        $auth = $this->myfavAuthService->validateOrDie($request);
+
+        // Load worker data.
+        $myfavMig = $this->myfavMigService->loadById($salesChannelContext->getContext(), $request->get('myfavMigId'));
+
+        if(null === $myfavMig) {
+            die('No worker with given id found');
+        }
+
+        $data =  [
+            'id' => $myfavMig->getId(),
+            'pos' => 0,
+            'state' => 0
+        ];
+        $this->myfavMigService->update($salesChannelContext->getContext(), $data);
+
+        $url = $this->router->generate('frontend.myfav.mig.work', [ 'message' => 'myfavMigReset', 'p' => $auth, 'myfavMigId' => $myfavMig->getId() ]);
+        return new RedirectResponse($url);
     }
 
     #[Route(path: 'myfav/mig/work', name: 'frontend.myfav.mig.work', methods: ['GET'])]

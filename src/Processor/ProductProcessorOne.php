@@ -38,7 +38,7 @@ class ProductProcessorOne
         $product = $this->productService->loadByProductNumber($context, strval($selectedEntries));
 
         if(null === $product) {
-            die('Unknown product with product number ' . $data['mainDetailId']);
+            die('Unknown product with product number ' . $selectedEntries);
         }
 
         // This is a product search, but not what we want to do right now, when we want to get a specific entry.
@@ -47,6 +47,8 @@ class ProductProcessorOne
 
         $response = $this->apiService->fetchData('/api/articles/', $query);
         $data = json_decode($response, true);
+
+
 
         if(!isset($data['data']) || !is_array($data['data'])) {
             // Artikel lokal deaktivieren.
