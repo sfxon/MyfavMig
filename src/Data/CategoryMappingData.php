@@ -32,6 +32,7 @@ class CategoryMappingData
             '233' => [ 'newId' => '0191a3af72f573b5a0c1e0375b9b6f0c', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],
             '252' => [ 'newId' => '0191a3af72f37043a50de6ca8e6aecf4', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],
             '312' => [ 'newId' => '0191a3af72ec7065b141b10de81db1d8', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],
+            '325' => [ 'newId' => '0191a3af6b517058b1af5cb68e3ffb98', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],
             '328' => [ 'newId' => '0191a3af6f077360ab2ca70456cc0dd1', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],
             '331' => [ 'newId' => '0191a3af72e97051a39d8fea4ed34ebc', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],
             '333' => [ 'newId' => '0191a3af72e27330911791e7f6023477', 'salesChannelId' => '0191a3af8087721b9f90c96bc7c3597f'],

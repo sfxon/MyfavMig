@@ -44,11 +44,8 @@ class ProductProcessorOne
         // This is a product search, but not what we want to do right now, when we want to get a specific entry.
         // $query = '?filter[0][property]=mainDetail.number&filter[0][value]=' . urlencode($selectedEntries);
         $query = $selectedEntries . '?useNumberAsId=true';
-
         $response = $this->apiService->fetchData('/api/articles/', $query);
         $data = json_decode($response, true);
-
-
 
         if(!isset($data['data']) || !is_array($data['data'])) {
             // Artikel lokal deaktivieren.

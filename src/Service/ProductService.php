@@ -29,6 +29,8 @@ class ProductService
     {
         $criteria = new Criteria();
         $criteria->addAssociation('properties');
+        $criteria->addAssociation('media');
+        $criteria->addAssociation('cover');
         $criteria->addFilter(new EqualsFilter('productNumber', $productNumber));
         return $this->productRepository->search($criteria, $context)->first();
     }

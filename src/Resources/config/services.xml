@@ -35,6 +35,12 @@
         </service>
 
         <!-- Processor -->
+        <service id="Myfav\Mig\Processor\CleanupImages" public="true">
+            <argument id="Myfav\Mig\Service\MyfavMigService" type="service"/>
+            <argument id="Myfav\Mig\Service\ProductMediaService" type="service"/>
+            <argument id="Myfav\Mig\Service\ProductService" type="service"/>
+        </service>
+
         <service id="Myfav\Mig\Processor\ProductProcessorOne" public="true">
             <argument id="Myfav\Mig\Service\ApiService" type="service"/>
             <argument id="Myfav\Mig\Service\CategoryService" type="service"/>
@@ -60,6 +66,10 @@
 
         <service id="Myfav\Mig\Service\MyfavAuthService" public="true">
             <argument id="Shopware\Core\System\SystemConfig\SystemConfigService" type="service"/>
+        </service>
+
+        <service id="Myfav\Mig\Service\ProductMediaService" public="true">
+            <argument id="product_media.repository" type="service"/>
         </service>
 
         <service id="Myfav\Mig\Service\ProductService" public="true">
